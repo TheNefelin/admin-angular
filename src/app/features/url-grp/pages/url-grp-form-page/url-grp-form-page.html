@@ -1,0 +1,47 @@
+<section>
+  <div class="pt-16 m-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">{{ isEditMode() ? 'Modificar' : 'Crear' }} Url Grp</h1>
+    <button routerLink="/url-grp" class="btn btn-primary m-4">Volver</button>
+  </div>
+
+  @if (errorMessage()) {
+    <app-message-error-component [message]="errorMessage()!" class="m-4" />
+  }
+  @if (successMessage()) {
+    <app-message-success-component [message]="successMessage()!" class="m-4" />
+  }
+
+  <form (ngSubmit)="onSubmit()" class="m-4">
+    <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-4 max-w-md" [disabled]="isLoading()">
+      <label class="label" for="name">Nombre</label>
+      <input
+        id="name"
+        type="text"
+        class="input input-bordered w-full"
+        placeholder="My awesome page"
+        [value]="formData().name"
+        (input)="updateName($any($event.target).value)"
+      />
+
+      <label class="label py-4 cursor-pointer justify-start gap-2">
+        <input
+          type="checkbox"
+          class="checkbox checkbox-primary"
+          [checked]="formData().isEnable"
+          (change)="updateIsEnable($any($event.target).checked)"
+        />
+        Activo
+      </label>
+
+      <div class="form-control w-full mt-6 flex flex-col sm:flex-row gap-2">
+        @if (isLoading()) {
+          <app-loading-component />
+        } @else {
+          <button type="submit" class="btn btn-primary flex-1">
+            {{ isEditMode() ? 'Modificar' : 'Crear' }}
+          </button>
+        }
+      </div>
+    </fieldset>
+  </form>
+</section>

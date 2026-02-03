@@ -1,0 +1,70 @@
+<section>
+  <div class="pt-16 m-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">{{ isEditMode() ? 'Modificar' : 'Crear' }} Url</h1>
+    <button routerLink="/url" class="btn btn-primary m-4">Volver</button>
+  </div>
+
+  @if (errorMessage()) {
+    <app-message-error-component [message]="errorMessage()!" class="m-4" />
+  }
+  @if (successMessage()) {
+    <app-message-success-component [message]="successMessage()!" class="m-4" />
+  }
+
+  <form (ngSubmit)="onSubmit()" class="m-4">
+    <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-4 max-w-md" [disabled]="isLoading()">
+      <label class="label" for="name">Nombre</label>
+      <input
+        id="name"
+        type="text"
+        class="input input-bordered w-full"
+        placeholder="Mi página web"
+        [value]="formData().name"
+        (input)="updateName($any($event.target).value)"
+      />
+
+      <label class="label" for="link">Enlace</label>
+      <input
+        id="link"
+        type="url"
+        class="input input-bordered w-full"
+        placeholder="https://ejemplo.com"
+        [value]="formData().link"
+        (input)="updateLink($any($event.target).value)"
+      />
+
+      <label class="label" for="id_UrlGrp">Grupo</label>
+      <select
+        id="id_UrlGrp"
+        class="select select-bordered w-full"
+        [value]="formData().id_UrlGrp"
+        (change)="updateIdUrlGrp(+$any($event.target).value)"
+      >
+        <option [value]="0">Seleccione un grupo</option>
+        @for (grp of urlgrpList(); track grp.id) {
+          <option [selected]="formData().id_UrlGrp == grp.id" [value]="grp.id">{{ grp.name }}</option>
+        }
+      </select>
+
+      <label class="label py-4 cursor-pointer justify-start gap-2">
+        <input
+          type="checkbox"
+          class="checkbox checkbox-primary"
+          [checked]="formData().isEnable"
+          (change)="updateIsEnable($any($event.target).checked)"
+        />
+        Activo
+      </label>
+
+      <div class="form-control w-full mt-6 flex flex-col sm:flex-row gap-2">
+        @if (isLoading()) {
+          <app-loading-component />
+        } @else {
+          <button type="submit" class="btn btn-primary flex-1">
+            {{ isEditMode() ? 'Modificar' : 'Crear' }}
+          </button>
+        }
+      </div>
+    </fieldset>
+  </form>
+</section>

@@ -1,0 +1,52 @@
+<div class="pt-16 m-4 flex justify-between items-center">
+  <h1 class="text-2xl font-bold">Url</h1>
+  <select class="select" [value]="selectedFilterId()" (change)="onFilter(+$any($event.target).value)">
+    <option [value]="0">Todos</option>
+    @for (item of urlgrpResult(); track item.id) {
+      <option [value]="item.id">{{ item.name }}</option>
+    }
+  </select>
+  <button (click)="onCreate()" class="btn btn-primary m-4">✚ Crear</button>
+</div>
+
+<div class="overflow-x-auto bg-base-100">
+  @if (loading()) {
+    <app-loading-component/>
+  } @else {
+    @if (urlResult()?.isSuccess) {
+      <table class="table table-zebra">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Link</th>
+            <th>Activo</th>
+            <th>Grupo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of filteredUrls(); track item.id) {
+            <tr>
+              <th>{{ item.id }}</th>
+              <td>{{ item.name }}</td>
+              <td>{{ item.link }}</td>
+              @if (item.isEnable) {
+                <td><div class="badge badge-success p-2">✓</div></td>
+              } @else {
+                <td><div class="badge badge-error p-2">✗</div></td>
+              }
+              <td>{{ item.UrlGrp.name }}</td>
+              <td class="flex gap-2">
+                <button (click)="onEdit(item)" class="btn btn-warning">✎</button>
+                <button (click)="onDelete(item)" class="btn btn-error">🗑</button>
+              </td>
+            </tr>
+          } 
+        </tbody>
+      </table>   
+    } @else {
+      <app-message-error-component [message]="urlResult()!.message"/>
+    }
+  } 
+</div>

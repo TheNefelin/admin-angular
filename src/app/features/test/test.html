@@ -1,0 +1,7 @@
+@if (loading()) {
+  <app-loading-component/>
+} @else {
+  <div class="container pt-16">
+    <pre class="p-6 bg-base-300 rounded-lg overflow-auto">{{ data() | json }}</pre>
+  </div>
+}

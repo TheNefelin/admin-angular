@@ -1,0 +1,34 @@
+<section>
+  <div class="pt-16 m-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">Url Grp</h1>
+    <button (click)="onCreate()" class="btn btn-primary m-4">✚ Crear</button>
+  </div>
+
+  <ul class="list bg-base-200 rounded-box shadow-md">
+    <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">Lista de Grupos de Urls</li>
+    
+    @if (loading()) {
+      <app-loading-component/>
+    } @else {
+      @if (result()?.isSuccess) {
+        @for (item of result()?.data; track $index) {
+          <li class="list-row">
+            <div class="w-12 text-center my-auto font-thin opacity-30 tabular-nums">{{ item.id }}</div>
+            @if (item.isEnable){
+              <div class="badge badge-success p-2 my-auto">✓</div>
+            } @else {
+              <div class="badge badge-error p-2 my-auto">✗</div>              
+            }
+            <div class="list-col-grow">
+              <div class="">{{ item.isEnable ? 'Activo' : 'Inactivo' }}</div>
+              <div class="text-xs uppercase font-semibold opacity-60">{{ item.name }}</div>
+            </div>
+            <button (click)="onEdit(item)" class="btn btn-warning">✎ Editar</button>
+            <button (click)="onDelete(item)" class="btn btn-error">🗑 Eliminar</button>
+          </li>
+        }
+      } @else {
+        <app-message-error-component [message]="result()!.message"/>
+      }
+    }
+    
