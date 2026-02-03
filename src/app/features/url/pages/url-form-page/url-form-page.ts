@@ -132,20 +132,15 @@ export class UrlFormPage {
       : this.urlService.create(payload);
 
     request.subscribe({
-      next: (res) => {
+      next: () => {
         this.isLoading.set(false);
-        if (res.isSuccess) {
-          this.successMessage.set(
-            this.isEditMode() ? 'Url actualizada correctamente' : 'Url creada correctamente'
-          );
-          setTimeout(() => this.router.navigate(['/url']), 1500);
-        } else {
-          this.errorMessage.set(res.message ?? 'Error al procesar la solicitud');
-        }
+        this.successMessage.set(
+          this.isEditMode() ? 'Url actualizada correctamente' : 'Url creada correctamente'
+        );
+        setTimeout(() => this.router.navigate(['/url']), 1500);
       },
-      error: (err) => {
+      error: () => {
         this.isLoading.set(false);
-        this.errorMessage.set(err?.message ?? 'Error de conexión. Intenta de nuevo.');
       },
     });
   }

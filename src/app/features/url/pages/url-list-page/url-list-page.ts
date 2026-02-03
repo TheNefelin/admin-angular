@@ -95,11 +95,7 @@ export class UrlListPage {
 
   onDelete(item: UrlUrlgrpModel) {
     this.urlService.delete(item.id).subscribe({
-      next: (res) => {
-        if (res.isSuccess) {
-          this.urlResource.reload();
-        }
-      }
+      next: () => this.urlResource.reload(),
     });
   }
 

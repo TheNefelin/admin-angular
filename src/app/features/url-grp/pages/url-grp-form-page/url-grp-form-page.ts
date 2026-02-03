@@ -73,20 +73,15 @@ export class UrlGrpFormPage {
       : this.urlgrpService.create(payload);
 
     request.subscribe({
-      next: (res) => {
+      next: () => {
         this.isLoading.set(false);
-        if (res.isSuccess) {
-          this.successMessage.set(
-            this.isEditMode() ? 'Grupo actualizado correctamente' : 'Grupo creado correctamente'
-          );
-          this.router.navigate(['/url-grp']);
-        } else {
-          this.errorMessage.set(res.message ?? 'Error al procesar la solicitud');
-        }
+        this.successMessage.set(
+          this.isEditMode() ? 'Grupo actualizado correctamente' : 'Grupo creado correctamente'
+        );
+        this.router.navigate(['/url-grp']);
       },
-      error: (err) => {
+      error: () => {
         this.isLoading.set(false);
-        this.errorMessage.set(err?.message ?? 'Error de conexión. Intenta de nuevo.');
       },
     });
   }

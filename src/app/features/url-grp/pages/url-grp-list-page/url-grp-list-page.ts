@@ -1,12 +1,12 @@
 import { Component, computed, inject, resource } from '@angular/core';
+import { Router } from '@angular/router';
 import { ApiResponseModel } from '@core/models/api-response-model';
 import { UrlGrpModel } from '@features/url-grp/models/url-grp-model';
 import { UrlGrpService } from '@features/url-grp/services/url-grp-service';
-import { firstValueFrom } from 'rxjs';
-import { catchError, of } from 'rxjs';
 import { LoadingComponent } from '@shared/components/loading-component/loading-component';
 import { MessageErrorComponent } from '@shared/components/message-error-component/message-error-component';
-import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-url-grp-list-page',
@@ -17,9 +17,8 @@ import { Router } from '@angular/router';
   templateUrl: './url-grp-list-page.html',
 })
 export class UrlGrpListPage {
-  private urlgrpService = inject(UrlGrpService);
-
-  constructor(private router: Router) {}
+  private readonly urlgrpService = inject(UrlGrpService);
+  private readonly router = inject(Router);
 
   private readonly urlgrpResource = resource({
     loader: async () => {
@@ -54,15 +53,7 @@ export class UrlGrpListPage {
 
   onDelete(item: UrlGrpModel) {
     this.urlgrpService.delete(item.id).subscribe({
-      next: (res) => {
-        console.log(res);
-        if (res.isSuccess) {
-          this.urlgrpResource.reload();
-          console.log('Url group deleted successfully');
-        } else {
-          console.error('Error deleting url group:', res.message);
-        }
-      }
+      next: () => this.urlgrpResource.reload(),
     });
   }
 }
